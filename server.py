@@ -20,6 +20,9 @@ import yt_dlp
 # Default download folder
 DOWNLOAD_FOLDER = os.path.expanduser("~/Downloads/YouTube")
 
+# Cookie file path - export from browser and place here
+COOKIE_FILE = os.path.join(os.path.dirname(__file__), "cookies.txt")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -77,6 +80,15 @@ def do_download(url: str, quality: str):
         "no_warnings": False,
         "noplaylist": True,
     }
+
+    # Add cookies if file exists
+    if os.path.exists(COOKIE_FILE):
+        ydl_opts["cookiefile"] = COOKIE_FILE
+        print(f"🍪 Using cookies from: {COOKIE_FILE}")
+    else:
+        print(
+            f"⚠️  No cookies file found. Create {COOKIE_FILE} for better compatibility."
+        )
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
