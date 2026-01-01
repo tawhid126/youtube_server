@@ -10,19 +10,7 @@ import os
 from contextlib import asynccontextmanager
 
 
-# Install dependencies if needed
-def install_dependencies():
-    """Install required packages if not already installed"""
-    packages = ["yt-dlp", "fastapi", "uvicorn"]
-    for package in packages:
-        try:
-            __import__(package.replace("-", "_"))
-        except ImportError:
-            print(f"📦 Installing {package}...")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-
-install_dependencies()
+# Note: Dependencies are installed via requirements.txt on Render
 
 from fastapi import FastAPI, BackgroundTasks, Query
 from fastapi.middleware.cors import CORSMiddleware
@@ -160,4 +148,5 @@ async def download_video(
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8765)
+    port = int(os.environ.get("PORT", 8765))
+    uvicorn.run(app, host="0.0.0.0", port=port)
