@@ -86,6 +86,20 @@ def do_download(url: str, quality: str):
         print(f"\n❌ Error: {str(e)}")
 
 
+@app.get("/")
+async def root():
+    """Root endpoint - Health check"""
+    return {
+        "success": True,
+        "message": "🎥 YouTube Downloader API is running!",
+        "endpoints": {
+            "/status": "Check server status",
+            "/info": "Get video info",
+            "/download": "Download video",
+        },
+    }
+
+
 @app.get("/status")
 async def get_status():
     """Check if server is running"""
